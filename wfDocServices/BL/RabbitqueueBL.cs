@@ -79,18 +79,18 @@ namespace wfDocServices.BL
             if (isDisposed)
                 return;
 
-            Console.WriteLine($"RabbitMQ connection shutdown detected: {e.ReplyText}");
+            logger.Info($"RabbitMQ connection shutdown detected: {e.ReplyText}");
 
             // Try reconnect
             try
             {
                 await Task.Delay(TimeSpan.FromSeconds(5)); // wait before retry
                 await RabbitqueueChannel(); // attempt to reconnect
-                Console.WriteLine("RabbitMQ reconnected successfully.");
+                logger.Info("RabbitMQ reconnected successfully.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"RabbitMQ reconnection failed: {ex.Message}");
+                logger.Info($"RabbitMQ reconnection failed: {ex.Message}");
                 // Optionally, add retry mechanism or escalate
             }
         }
