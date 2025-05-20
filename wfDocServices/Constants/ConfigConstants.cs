@@ -14,6 +14,7 @@
         public static readonly string rabbitqueueHost = "Rabbitqueue:host";
         public static readonly string rabbitqueueUser = "Rabbitqueue:user";
         public static readonly string rabbitqueuePass = "Rabbitqueue:pass";
+        public static readonly string env = "env";
     }
 }
 //"AccountLockoutSettings": {

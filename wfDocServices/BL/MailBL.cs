@@ -16,7 +16,6 @@ namespace wfDocServices.BL
 {
     public class MailBL : IDisposable
     {
-        private AsyncEventingBasicConsumer consumer;
         private static UtilityBL utility = new UtilityBL();
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public async Task ActionNotificationAutoEmail()
@@ -28,10 +27,10 @@ namespace wfDocServices.BL
 
                 // 2. Get a channel (it will auto-initialize or reconnect if needed)
                 var channel = await rabbitqueueBL.RabbitqueueChannel();
-
+                UtilityBL utilitylogic = new UtilityBL();
                 // 3. Declare queue
                 await channel.QueueDeclareAsync(
-                    queue: RabbitqueueStringType.ActionNotify,
+                    queue: RabbitqueueStringType.ActionNotify + utilitylogic.ReadConfigFile(ConfigConstants.env),
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -54,7 +53,7 @@ namespace wfDocServices.BL
 
                 // 5. Start consuming
 
-                await channel.BasicConsumeAsync(queue: RabbitqueueStringType.ActionNotify, autoAck: false, consumer: consumer);
+                await channel.BasicConsumeAsync(queue: RabbitqueueStringType.ActionNotify + utilitylogic.ReadConfigFile(ConfigConstants.env), autoAck: false, consumer: consumer);
 
             }
             catch (Exception ex)
@@ -72,10 +71,10 @@ namespace wfDocServices.BL
 
                 // 2. Get a channel (it will auto-initialize or reconnect if needed)
                 var channel = await rabbitqueueBL.RabbitqueueChannel();
-
+                UtilityBL utilitylogic = new UtilityBL();
                 // 3. Declare queue
                 await channel.QueueDeclareAsync(
-                    queue: RabbitqueueStringType.VerificationCode,
+                    queue: RabbitqueueStringType.VerificationCode+ utilitylogic.ReadConfigFile(ConfigConstants.env),
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -97,7 +96,7 @@ namespace wfDocServices.BL
 
                 // 5. Start consuming
 
-                await channel.BasicConsumeAsync(queue: RabbitqueueStringType.VerificationCode, autoAck: false, consumer: consumer);
+                await channel.BasicConsumeAsync(queue: RabbitqueueStringType.VerificationCode+ utilitylogic.ReadConfigFile(ConfigConstants.env), autoAck: false, consumer: consumer);
 
             }
             catch (Exception ex)
